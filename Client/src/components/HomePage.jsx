@@ -35,7 +35,6 @@ const HomePage = () => {
                             y: textY,
                             position: "absolute",
                             top: "125px",
-                            left: "540px",
                             letterSpacing: letterSpacing,
                         }}
                         
