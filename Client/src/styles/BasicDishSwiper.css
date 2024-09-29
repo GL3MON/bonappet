@@ -1,0 +1,64 @@
+@font-face {
+    font-family: 'Gilroy-bold';
+    src: local('Gilroy-Bold'), url(../fonts/Gilroy-Bold.ttf) format('truetype');
+}
+
+.basic-dish-swipe {
+    display: flex;
+    font-family: 'Gilroy-bold';
+    flex-direction: column;
+    word-spacing: 0.1%;
+    font-weight: bolder;
+    margin: 0 6em 0 6em;
+    font-size: 15px;
+    padding-bottom: 100px;
+    border-bottom: 2px solid rgb(179, 179, 179);
+}
+.top-nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.top-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.swipe-items::-webkit-scrollbar {
+    display: none;
+}
+  
+
+.top-nav-icons {
+    display: flex;
+    flex-direction: row;
+    font-size: 28px;
+    justify-content: space-between;
+    width: 50px;
+    font-family: 'Gilroy-bold';
+    word-spacing: 0.1%;
+    align-items: center;
+    justify-self: flex-end;
+}
+
+.top-nav-icons div {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-nav-icons div:hover {
+    color: rgb(176, 0, 0);
+}
+
+.swipe-items {
+    display: flex;
+    overflow: auto;
+    padding: 20px;
+    width: 100%;
+    border-radius: 20px;
+    height: fit-content;
+    padding-bottom: 20px;
+}
