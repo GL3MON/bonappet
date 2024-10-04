@@ -15,7 +15,7 @@ const BasicDishSwiper = () => {
         <div className='swipe-items'>
            {
             dummyList.map((item, index) => (
-                <SwipeItem key={index} />
+                <SwipeItem key={index} name="Moneky" veg={true}/>
             ))
            }
         </div>
