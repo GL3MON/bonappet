@@ -10,7 +10,7 @@ const BasicDishSwiper = () => {
 
     return <div className="basic-dish-swipe">
         <div className="top-nav">
-            <h1>Top Restaurants chains around You</h1>
+            <h1>Top Rated Food </h1>
         </div>
         <div className='swipe-items'>
            {
