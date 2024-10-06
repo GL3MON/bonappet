@@ -20,7 +20,7 @@ New input: {query}
 class BonBot:
     def __init__(self, max_output_tokens: int=1200, model="gemini-1.5-pro"):
         self.llm = ChatGoogleGenerativeAI(
-                api_key="AIzaSyD9qheVYpsYfjHjlbg8IcOS3nYPN7Xin0Q",
+                api_key="",
                 model=model,
                 temperature=0.7,
                 max_output_tokens=max_output_tokens,
