@@ -2,10 +2,10 @@ import { color, motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import bgimg from '../assets/foodDashboard.jpg'
 import '../styles/HomePage.css';
-import NavBar from './NavBar';
+import NavBar from './RestNav';
 import BasicDishSwiper from './BasicDishSwiper';
 
-const HomePage = () => {
+const RestPage = () => {
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -15,8 +15,6 @@ const HomePage = () => {
     const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "150%"]);
     const textY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
     const letterSpacing = useTransform(scrollYProgress, [0,1], ["15px", "100px"]);
-
-
 
     return (
         <div className="homepage" ref={ref}>
@@ -43,12 +41,11 @@ const HomePage = () => {
                 </motion.h1>
                 <div className='overlay' />
             </div>
-            <NavBar />
-            <BasicDishSwiper />
-            <BasicDishSwiper />
-            <BasicDishSwiper />
+            <NavBar content={"pizza... Burgers... Icecreams..."}/>
+            <BasicDishSwiper title="Top Rated"/>
+            <BasicDishSwiper title="Healthy"/>
         </div>
     );
 }
 
-export default HomePage;
+export default RestPage;
