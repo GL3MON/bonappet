@@ -41,7 +41,7 @@ const RestPage = () => {
                 </motion.h1>
                 <div className='overlay' />
             </div>
-            <NavBar content={"pizza... Burgers... Icecreams..."}/>
+            <NavBar content={"Pizza... Burgers... Icecreams..."}/>
             <BasicDishSwiper title="Top Rated"/>
             <BasicDishSwiper title="Healthy"/>
         </div>
