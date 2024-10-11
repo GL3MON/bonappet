@@ -22,7 +22,7 @@ const router = createBrowserRouter([
     path: 'RestDash/',
     element: <RestDashboard />,
     errorElement: <div>404 Not Found</div>,
-  }
+  },
   {
     path: 'chat/',
     element: <ChatBot />,

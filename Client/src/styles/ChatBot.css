@@ -1,20 +1,120 @@
-@font-face {
-    font-family: 'Gilroy-bold';
-    src: local('Gilroy-Bold'), url(../fonts/Gilroy-Bold.ttf) format('truetype');
-}
-
 .chatbot-container {
+    display: flex;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
     height: 100%;
     width: 100%;
     background-color: rgb(176, 0, 0);
+    background-image: url("src/assets/burg.png");
+    background-size: 2000px;
     position: absolute;
-    z-index: 0;
+    z-index: -1;
 }
 
-.chatbot-overlay {
-    height: 100%;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
-    position: absolute;
+.chatbot-area {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    width: 40vw;
+    min-width: 300px;
+    border-radius: 20px;
+    min-height: 500px;
+    box-shadow: 20px 20px 200px 0px rgba(0, 0, 0,0.2);
     z-index: 1;
+    overflow: scroll;
+}
+
+.chatbot-chatarea {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    height: 90vh;
+    width: 40vw;
+    border-radius: 20px 20px 0px 0px;
+    box-shadow: 20px 20px 200px 0px rgba(0, 0, 0,0.2);
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
+    overflow: scroll;
+}
+
+.chatbot-title {
+    position: absolute;
+    font-family: "Dancing Script", cursive;
+    letter-spacing: 70px;
+    font-size: 250px;
+    top: -30px;
+}
+
+.user-chat {
+    padding: 20px 10px;
+    font-family: monospace;
+    font-size: 1.2em;
+    background-color: rgb(212, 212, 212);
+    margin: 20px 5px 20px 0px;
+    width: fit-content;
+    overflow-wrap: break-word;
+    max-width: 60%;
+    border-radius: 20px 20px 20px 20px;
+    align-self: flex-end; /* Align user chat to the right */
+}
+
+.bot-chat {
+    padding: 20px 10px;
+    font-family: monospace;
+    font-size: 1.2em;
+    background-color: rgb(212, 212, 212);
+    margin: 20px 0px 20px 5px;
+    width: fit-content;
+    overflow-wrap: break-word;
+    max-width: 60%;
+    border-radius: 20px 20px 20px 20px;
+    align-self: flex-start; /* Align bot chat to the left */
+}
+
+.chatbot-menu {
+    position: sticky;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+    background-color: rgb(141, 141, 141);
+    bottom: 0;
+}
+
+.chatbot-area textarea {
+    resize: none;
+    height: 35px;
+    border: 0px;
+    border-radius: 10px;
+    font-size: 17px;
+    margin: 0;
+    overflow:auto;
+    width: 60%;
+    margin-left: auto;
+    padding: 5px;
+}
+
+.send-button {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 5px 15px 5px 15px;
+    font-size: 17px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+}
+
+.chatbot-chatarea::-webkit-scrollbar {
+    display: none;
+}
+
+.chatbot-area::-webkit-scrollbar {
+    display: none;
+}
+
+.chatbot-area::-webkit-scrollbar {
+    display: none;
 }
