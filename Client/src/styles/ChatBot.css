@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Gilroy-bold';
+    src: local('Gilroy-Bold'), url(../fonts/Gilroy-Bold.ttf) format('truetype');
+}
+
+.chatbot-container {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(176, 0, 0);
+    position: absolute;
+    z-index: 0;
+}
+
+.chatbot-overlay {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    z-index: 1;
+}
