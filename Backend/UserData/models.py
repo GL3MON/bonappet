@@ -46,6 +46,7 @@ class DeliveryPartners(models.Model):
     vehicle_model = models.CharField(max_length=50)
     license_number = models.CharField(max_length=15)
     vehicle_id = models.CharField(max_length=10, blank=False)
+    password = models.CharField(max_length=200, validators=[MinLengthValidator(8)], blank=False, default=12345678)
 
     objects = BAUserManager()
     USERNAME_FIELD = 'employee_mail'

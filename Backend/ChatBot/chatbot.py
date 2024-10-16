@@ -34,5 +34,5 @@ class BonBot:
             )
     
 
-#     def get_llm_chain(self):
-#         return self.prompt | self.llm | StrOutputParser()
+    def get_llm_chain(self):
+       return self.prompt | self.llm | StrOutputParser()
