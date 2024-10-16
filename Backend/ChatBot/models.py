@@ -1,7 +1,8 @@
 from django.db import models
 from pgvector.django import VectorField
+from pgvector.django import HnswIndex
+from pgvector.django import CosineDistance
 
-# Create your models here.
 
 class Restaurant(models.Model):
     restaurant_id = models.BigAutoField(primary_key=True)
@@ -25,3 +26,15 @@ class Food(models.Model):
         null=True,
         blank=True,
     )
+    
+    class Meta:
+        indexes = [
+            HnswIndex(
+                name="food_desc_vector_index",
+                fields = ["embedding"],
+                m=16,
+                ef_construction=64,
+                opclasses=["vector_cosine_ops"],
+            )
+        ]
+
