@@ -8,26 +8,29 @@ from typing import Type
 HELPER_AGENT_PROMPT = '''
 You are a host of online food delivery company named "bonappet". You are italian. You need to talk in an italian accent.
 You have to give recommendations of food and restaurants. Answer to people in a very warm and welcoming way. You have
-knowledge about food and restaurants only. Don't answer anything that is out of scope of your specific domain. Just politely
-refuse to tell them about other stuff. You have access to tools called "sql-query" which you can use when required the information 
-on restaurents and foods for recommending the user based on the preferences. Only enter the SQL Query.
+to only answer about food and restaurants only. Don't answer anything that is out of scope of your specific domain. Just politely
+refuse to tell them about other stuff. Your knowledge about food and restaurants only comes from the context given to you. Don't
+answer the question without the given content. You have tell about which Restuarant the food is from and explain its description to
+the user.
 
-New input: {query}
+User Input: {query}
+
+Context: {context}
 
 '''
 
 
 class BonBot:
-    def __init__(self, max_output_tokens: int=1200, model="gemini-1.5-pro"):
+    def __init__(self, api_key: str, max_output_tokens: int=1200, model="gemini-1.5-pro"):
         self.llm = ChatGoogleGenerativeAI(
-                api_key="",
+                api_key=api_key,
                 model=model,
                 temperature=0.7,
                 max_output_tokens=max_output_tokens,
             )
         self.prompt = PromptTemplate(
                 template=HELPER_AGENT_PROMPT,
-                input_variables=["user_query"],
+                input_variables=["query", "context"],
             )
     
 

@@ -8,24 +8,16 @@ from .chatbot import BonBot
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from .models import Food, Restaurant
 from pgvector.django import CosineDistance
-import time
 import json
 
-# llm = ChatGoogleGenerativeAI(
-#     api_key="AIzaSyBmW8aWpZdngH83dR2-jZCN9pnZLRT0HiY",
-#     model="gemini-1.5-pro",
-#     temperature=0.7,
-#     max_output_tokens=1200,
-# )
+API_KEY = "AIzaSyCPz0WdsXp9dhYg_rWNZnGDINv11rqxi-I"
 
+bon_bot = BonBot(api_key=API_KEY)
+bon_bot_chain =  bon_bot.get_llm_chain()
+embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=API_KEY)
 
-# bon_bot = BonBot()
-# bon_bot_chain =  bon_bot.get_llm_chain()
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key="AIzaSyCPz0WdsXp9dhYg_rWNZnGDINv11rqxi-I")
-
-def bon_bot_stream_response(user_query: str):
-    test = "dsdasdasdasasdasdasasasdas"
-    for chunk in test:
+def bon_bot_stream_response(query: str, context: str):
+    for chunk in bon_bot_chain.stream({"query":query, "context":context}):
         print(chunk)
     yield chunk
 
@@ -34,15 +26,17 @@ def chat(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body.decode("utf-8"))
-            user_query = data.get("query", "")
-            print(user_query)
+            query = data.get("query", "")
+            print(query)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON format"}, status=400)
 
-        if user_query:
+        if query:
             try:
-                bot_response = "Horray... Dev on work"
-                return StreamingHttpResponse(bon_bot_stream_response(user_query=user_query))
+                embedding = embeddings.embed_query(query)
+                food = Food.objects.order_by(CosineDistance('embedding', embedding))[0]
+                context = f"Food Name: {food.name}, Food Description: {food.description}, Restaurent: {food.restaurant.name}"
+                return StreamingHttpResponse(bon_bot_stream_response(query=query, context=context))
             except Exception as e:
                 return JsonResponse({"error": str(e)}, status=500)
         else:

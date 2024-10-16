@@ -14,7 +14,7 @@ class Restaurant(models.Model):
 class Food(models.Model):
     food_id = models.BigAutoField(primary_key=True)
     name = models.TextField()
-    restaurant_id = models.ForeignKey(
+    restaurant = models.ForeignKey(
         Restaurant,
         on_delete=models.CASCADE,
         blank=False
