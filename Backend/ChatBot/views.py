@@ -60,7 +60,7 @@ def insert_food(request):
             restaurant = Restaurant.objects.get(restaurant_id=restaurant_id)
             Food.objects.create(
                 name=name,
-                restaurant_id=restaurant,
+                restaurant=restaurant,
                 description=description,
                 embedding=embedding
             )
