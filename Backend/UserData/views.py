@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
+from UserData.models import Users
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json

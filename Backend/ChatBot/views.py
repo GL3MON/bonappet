@@ -21,7 +21,7 @@ def bon_bot_stream_response(query: str, context: str):
         print(chunk)
     yield chunk
 
-@csrf_exempt
+# @csrf_exempt
 def chat(request):
     if request.method == "POST":
         try:

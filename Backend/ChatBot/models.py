@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxLengthValidator
 from pgvector.django import VectorField
 from pgvector.django import HnswIndex
 from pgvector.django import CosineDistance
@@ -9,7 +10,7 @@ class Restaurant(models.Model):
     name =  models.TextField()
     restaurant_type = models.BooleanField(default=False)
     location = models.TextField(null=True)
-    rating = models.SmallIntegerField(max_length=5,default=1)
+    rating = models.SmallIntegerField(validators=[MaxLengthValidator(10)],default=1)
 
 class Food(models.Model):
     food_id = models.BigAutoField(primary_key=True)

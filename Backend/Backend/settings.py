@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'BonAppet',
+        'NAME': 'bonappet',
         'USER': 'postgres',
-        'PASSWORD': 'lolipop123',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
 
