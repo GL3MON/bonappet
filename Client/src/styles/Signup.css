@@ -41,19 +41,11 @@
     gap : 25px
     
 }
-/*
-.inputs:hover{
-    background-color : #3a767b;    
-}
-    */
-.submit-container{
-    
-    color: #af0000;
-    margin-top: 10px;
-    margin-left : 700px;
-    margin-right: 700px;
-}
 .submit:hover{
+    font-size: 20px;
+    font-weight: bold;
+}
+.submit:click{
     font-size: 20px;
     font-weight: bold;
 }
