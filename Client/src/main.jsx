@@ -4,6 +4,8 @@ import HomePage from './components/HomePage'
 import RestPage from './components/RestPage'
 import RestDashboard from './components/RestDashboard'
 import ChatBot from './components/ChatBot'
+import Login from './components/Login.jsx'
+import Signup from './components/SignUp.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 
@@ -26,6 +28,16 @@ const router = createBrowserRouter([
   {
     path: 'chat/',
     element: <ChatBot />,
+    errorElement: <div>404 Not Found</div>
+  },
+  {
+    path: 'login/',
+    element: <Login />,
+    errorElement: <div>404 Not Found</div>
+  },
+  {
+    path: 'signup/',
+    element: <Signup />,
     errorElement: <div>404 Not Found</div>
   }
 ]);
