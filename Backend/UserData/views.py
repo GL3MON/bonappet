@@ -26,6 +26,17 @@ def user_login(request):
         return JsonResponse({"response": "Login Failed"}, status=400)
 
 @csrf_exempt
+def partner_register(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"response": "Invalid JSON format"}, status=400)
+    employee_mail = data.get("user_mail", "")
+    name = data.get("name", "")
+    password = data
+
+
+@csrf_exempt
 def user_register(request):
     try:
         data = json.loads(request.body.decode("utf-8"))

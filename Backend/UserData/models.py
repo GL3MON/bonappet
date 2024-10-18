@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.decorators import method_decorator
@@ -6,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import MinLengthValidator, MaxLengthValidator 
+from django.contrib.auth.hashers import check_password
 
 class BAUserManager(BaseUserManager):
     @method_decorator(csrf_exempt)
@@ -19,6 +21,18 @@ class BAUserManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
+
+class DeliveryPartnerManager(BaseUserManager):
+    @method_decorator(csrf_exempt)
+    def create_user(self, username, password=None):
+        if not username:
+            raise ValueError('Email is required!')
+        if not password:
+            raise ValueError('Password is required.')
+        partner = self.model(employee_mail = username)
+        partner.set_password(password)
+        partner.save()
+        return partner
 
 class Users(AbstractBaseUser, PermissionsMixin):
     user_pid = models.CharField(default="BA4") #The prefix of userID
@@ -48,9 +62,17 @@ class DeliveryPartners(models.Model):
     vehicle_id = models.CharField(max_length=10, blank=False)
     password = models.CharField(max_length=200, validators=[MinLengthValidator(8)], blank=False, default=12345678)
 
-    objects = BAUserManager()
+    objects = DeliveryPartnerManager()
     USERNAME_FIELD = 'employee_mail'
 
+    def authenticate(self, employee_mail, password):
+        try:
+            partner = DeliveryPartners.objects.get(username = employee_mail)
+        except DeliveryPartners.DoesNotExist:
+            return None
+        if check_password(password, partner.password):
+            return partner
+        return None
     def __str__(self):
         return f"{self.employee_pid}{self.employee_id_suf}"
     def welcome_message(self):
