@@ -3,7 +3,6 @@ from UserData.models import Users
 
 class Bon_AppetBackend(BaseBackend):
     def authenticate(self, user_mail, password):
-        print(user_mail)
         try:
             user = Users.objects.get(user_mail=user_mail)
             if user.check_password(password):

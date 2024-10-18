@@ -11,13 +11,13 @@ from django.contrib.auth.hashers import check_password
 
 class BAUserManager(BaseUserManager):
     @method_decorator(csrf_exempt)
-    def create_user(self, username, password=None):
-        if not username:
+    def create_user(self, request, user_mail, password, user_name, phone_number, address):
+        if not user_mail:
             raise ValueError('Email is required!')
         if not password:
             raise ValueError('Password is required.')
-        mail = self.normalize_email(username)
-        user = self.model(username = mail)
+        mail = self.normalize_email(user_mail)
+        user = self.model(user_mail = mail, user_name=user_name, phone_number=phone_number, address=address)
         user.set_password(password)
         user.save()
         return user
