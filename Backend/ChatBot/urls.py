@@ -5,4 +5,5 @@ urlpatterns = [
     path("chat/", views.chat, name="chat"),
     path("insert-food/", views.insert_food, name="insert-food"),
     path("test/", views.test_vector, name="test"),
+    path("clear/", views.clear_chat, name="clear"),
 ]
