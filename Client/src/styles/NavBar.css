@@ -72,6 +72,38 @@
     fill: rgb(176, 0, 0);
 }
 
+
+.Cart {
+    display: flex;
+    margin-left: auto; /* Pushes the location div to the right */
+    font-family: arial, Helvetica Neue, sans-serif; 
+    padding: 10px;
+    font-size: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: 700;
+    color: #686b78;
+}
+
+.cart {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgb(209, 209, 209);
+    padding: 8px 30px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.cart svg {
+    width: 20px;
+    height: 20px;
+    fill: #686b78;
+}
+
+.cart:hover svg {
+    fill: rgb(176, 0, 0);
+}
 .arrow-icon {
     width: fit-content;
     height: fit-content;

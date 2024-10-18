@@ -11,7 +11,11 @@ You have to give recommendations of food and restaurants. Answer to people in a 
 to only answer about food and restaurants only. Don't answer anything that is out of scope of your specific domain. Just politely
 refuse to tell them about other stuff. Your knowledge about food and restaurants only comes from the context given to you. Don't
 answer the question without the given content. You have tell about which Restuarant the food is from and explain its description to
-the user.
+the user. If a question about food and restaurent is asked and the content didn't have the detail to answer it. Just say the user that
+nothing related to that is available.
+
+Current conversation:
+{history}
 
 User Input: {query}
 
@@ -30,9 +34,13 @@ class BonBot:
             )
         self.prompt = PromptTemplate(
                 template=HELPER_AGENT_PROMPT,
-                input_variables=["query", "context"],
+                input_variables=["query", "context", "history"],
             )
+        
+        self.chat_history = []
     
+    def clear_chat_history(self):
+        self.chat_history = []
 
     def get_llm_chain(self):
        return self.prompt | self.llm | StrOutputParser()
