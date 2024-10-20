@@ -1,5 +1,7 @@
 from django.contrib.auth.backends import BaseBackend
-from UserData.models import Users
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.http import HttpRequest
+from UserData.models import Users, DeliveryPartners
 
 class Bon_AppetBackend(BaseBackend):
     def authenticate(self, user_mail, password):
@@ -9,9 +11,12 @@ class Bon_AppetBackend(BaseBackend):
                 return user
         except Users.DoesNotExist:
             return None
-    def get_user(self, user_id_suf):
+
+class DeliveryPartnerBackend(BaseBackend):
+    def authenticate(self, employee_mail, password):
         try:
-            user = Users.objects.get(pk=user_id_suf)
-            return f"Welcome back, {user.user_pid}{user.user_id_suf}"
-        except Users.DoesNotExist:
+            partner  = DeliveryPartners.objects.get(employee_mail=employee_mail)
+            if partner.check_password(password):
+                return partner
+        except DeliveryPartners.DoesNotExist:
             return None
