@@ -2,8 +2,6 @@ from django.db import models
 from django.core.validators import MaxLengthValidator
 from pgvector.django import VectorField
 from pgvector.django import HnswIndex
-from pgvector.django import CosineDistance
-from UserData.models import Users
 
 
 class Restaurant(models.Model):
@@ -41,3 +39,7 @@ class Food(models.Model):
         ]
 
 class LLMChat(models.Model):
+    user = models.OneToOneField('UserData.Customer', on_delete=models.CASCADE, null=True)
+    chat = models.TextField()
+
+

@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import MinLengthValidator, MaxValueValidator 
 from django.contrib.auth.hashers import make_password, check_password
+from ChatBot.models import Food
 
 class BAUserManager(BaseUserManager):
 
@@ -90,3 +91,11 @@ class DeliveryPartners(models.Model):
 def send_message(sender, instance, created, **kwargs):
         if created:
             print(instance.welcome_message())
+
+class Cart(models.Model):
+    food_item = models.ForeignKey('ChatBot.Food', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.food_item.name}"
+    
