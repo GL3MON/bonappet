@@ -6,7 +6,7 @@ import RestDashboard from './components/RestDashboard'
 import ChatBot from './components/ChatBot'
 import Login from './components/Login.jsx'
 import Signup from './components/SignUp.jsx'
-import Cart from './components/Cart.jsx'
+import CartPage from './components/Cart.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'cart/',
-    element: <Cart />,
+    element: <CartPage />,
     errorElement: <div>404 Not Found</div>,
   },
   {
