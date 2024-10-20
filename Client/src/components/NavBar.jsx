@@ -114,6 +114,7 @@ const NavBar = () => {
             <motion.div className='nav-right'
                 variants={topVariants}
                 whileHover={"hover"}
+                onClick={()=>{nagivate("cart/")}}
             >
                 <motion.div className='location'>
                 <div className='location-icon'>
