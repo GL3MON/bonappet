@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     errorElement: <div>404 Not Found</div>,
   },
   {
-    path: '/cart',
+    path: 'cart/',
     element: <Cart />,
     errorElement: <div>404 Not Found</div>,
   },

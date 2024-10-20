@@ -1,55 +1,123 @@
-.container{
-    align-items: center;
-    display: :flex;
-    flex-direction : column;
-    margin : auto;
-    align-items: center;
-    margin-top : 200px;
-    background : #fff;
-    padding-bottom: 30px
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap');
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #e0e0e0 inset !important; /* Removes autofill background */
+    box-shadow: 0 0 0 1000px #e0e0e0 inset !important; /* Ensures full override of grey overlay */
+    -webkit-text-fill-color: #000 !important; /* Set text color to your preference */
 }
-.header{
+
+
+
+.register-container {
+    background-color: rgb(176, 0, 0);
+    display: grid;
+    display: grid;
+    place-items: center; 
+    height: 100vh;
+    width: 100vw;
+}
+
+.register-image {
+    position: absolute;
+    overflow: hidden;
+    left: 25%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 25px;
-    color : #af0000;
-    gap : 9px;
-    width: 100% ;
-    margin-top :30px ;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 25px;
+    box-shadow: 20px 20px 200px 0px rgba(0, 0, 0,0.2);
+    z-index: 0;
 }
-.underline {
-    width: 100px;
-    height: 6px;
-    align-items: center;
-    background: #af0000;
-    border-radius :10px;
-}
-.img {
-    margin : 0px 30px;
-}
-.inputs{ 
-    margin-left : 550px;
-    margin-top:    30px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    background-color: #eaeaea;
-    border-radius: 10px;
+
+.register-image img {
     width: 450px;
-    height: 275px;
-    gap : 25px
-    
+    height: auto;
+    filter: brightness(80%);
+    z-index: 1;
 }
-.submit:hover{
-    font-size: 20px;
-    font-weight: bold;
+
+.register-text-overlay {
+    position: absolute;
+    padding: 10px 10px 30px 10px;
+    left: 1.5vh;
+    font-family: "Playwrite GB S", cursive;
+    bottom: 2vh;
+    color: white;
+    z-index: 2;
 }
-.submit:click{
-    font-size: 20px;
-    font-weight: bold;
+
+.food-title {
+    font-size: 38px;
 }
-.submit{
+
+
+
+.register-box {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    font-size: 15px;
+    justify-content: center;
+    background-color: rgb(233, 233, 233);
+    box-shadow: 20px 20px 200px 0px rgba(0, 0, 0,0.2);
+    overflow: hidden;
+    left: 47%;
+    height: 50%;
+    width: 30%;
+    border-radius: 25px;
+    border: 1px solid black;
+    z-index: 1;
+}
+
+.register-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.register-row input {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-color: rgb(199, 199, 199);
+    background-color: rgb(233,233,233);
+    font-size: 20px;
+    padding: 5px;
+}
+
+.register-box input:focus {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    outline: none;
+    border-color: black;
+}
+
+.register-icon {
+    margin-top: auto;
+    height: 25px;
+    width: 25px;
+}
+
+.register-button {
+    background-color: rgb(175, 51, 51);
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 5px;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: 1px solid black;
+}
+
+.bonappet-title{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: "Dancing Script", cursive;
+    font-size: 50px;
+    color: white;
+    letter-spacing: 10px;
+    font-weight: bold;
 }
