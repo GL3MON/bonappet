@@ -51,9 +51,12 @@ def partner_register(request):
     print(info)
     if password != repassword:
         return JsonResponse({"error": "Passwords do not match"}, status=401)
-    if DeliveryPartners.objects.filter(employee_mail=employee_mail).exists():
+    if Users.objects.filter(email=employee_mail).exists():
         return JsonResponse({"error": "Registration failed. User already exists."}, status=401)
-    partner = DeliveryPartners.objects.create_user(request=request, employee_mail=employee_mail, name=name, password=password, phone_number=phone_no, vehicle_model=veh_model, license_number=license_no, vehicle_id=veh_id)
+    user = Users.objects.create_user(email=employee_mail, password=password)
+    user.is_partner = True
+    user.save()
+    partner = DeliveryPartners.objects.create_user(request=request, user=user, name=name, phone_number=phone_no, vehicle_model=veh_model, license_number=license_no, vehicle_id=veh_id)
     partner.save()
     
     return JsonResponse({"response": "Registration successful"}, status=200)
@@ -69,18 +72,21 @@ def user_register(request):
     user_mail = data.get("user_mail", "")
     user_name = data.get("user_name", "")
     password = data.get("password", "")
-    repassword = password # TODO: Change this
+    repassword = data.get("repassword", "")
     phone_no = data.get("phone","")
     add = data.get("address","")
     print(data)
     if password != repassword:
         return JsonResponse({"response": "Passwords do not match"}, status=401)
 
-    if Customer.objects.filter(user_mail=user_mail).exists():
+    if Users.objects.filter(email=user_mail).exists():
         return JsonResponse({"response": "Registration Failed, User Exists"}, status=200)
 
     # Create the new user
-    user = Customer.objects.create_user(request=request, user_mail=user_mail, user_name=user_name, password=password,phone_number = phone_no,address=add) # TODO: Change this
+    user = Users.objects.create_user(email=user_mail, password=password)
+    user.is_cutomer = True
     user.save()
+    customer = Customer.objects.create_user(request=request, user=user, user_name=user_name, phone_number = phone_no,address=add)
+    customer.save()
 
     return JsonResponse({"response": "Registration Success"}, status=200)
