@@ -87,6 +87,11 @@ class DeliveryPartners(models.Model):
     def welcome_message(self):
         return f"Welcome to the BonAppet Family, {self.employee_pid}{self.employee_id_suf}! Let's get started!"
     
+class Feedback(models.Model):
+    feedback_pid = models.CharField(default="BAF")
+    feedback_sid = models.AutoField(primary_key=True)
+    content = models.TextField(max_length=450)
+    
 @receiver(post_save, sender= [Users, DeliveryPartners])
 def send_message(sender, instance, created, **kwargs):
         if created:

@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MaxLengthValidator
+from django.core.validators import MaxValueValidator
 from pgvector.django import VectorField
 from pgvector.django import HnswIndex
 
@@ -8,12 +8,20 @@ class Restaurant(models.Model):
     restaurant_id = models.BigAutoField(primary_key=True)
     name =  models.TextField()
     restaurant_type = models.BooleanField(default=False)
+    cuisine = models.CharField(max_length=100)
+    availability = models.BooleanField(default=True)
+    contact_no = models.BigIntegerField(validators=[MaxValueValidator(9999999999)])
     location = models.TextField(null=True)
-    rating = models.SmallIntegerField(validators=[MaxLengthValidator(10)],default=1)
+    rating = models.SmallIntegerField(validators=[MaxValueValidator(5)],default=1)
 
 class Food(models.Model):
     food_id = models.BigAutoField(primary_key=True)
     name = models.TextField()
+    cuisine_type = models.CharField(max_length=100)
+    food_category = models.BooleanField(default=True)
+    rating = models.SmallIntegerField(validators=[MaxValueValidator(5)], default=1)
+    availability = models.BooleanField(default=True)
+    price = models.IntegerField
     restaurant = models.ForeignKey(
         Restaurant,
         on_delete=models.CASCADE,
