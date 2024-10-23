@@ -86,6 +86,7 @@ def user_register(request):
         return JsonResponse({"response": "Registration Failed, User Exists"}, status=200)
 
     customer = Users.objects.create_customer(request=request, email=user_mail, password=password, user_name=user_name, phone_number = phone_no,address=add)
+    customer = Users.objects.create_customer(request=request, email=user_mail, password=password, user_name=user_name, phone_number = phone_no,address=add)
     customer.save()
 
     return JsonResponse({"response": "Registration Success"}, status=200)

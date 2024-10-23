@@ -2,7 +2,8 @@ from django.http.response import HttpResponseNotFound, JsonResponse, StreamingHt
 from django.views.decorators.csrf import csrf_exempt
 from .chatbot import BonBot
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from .models import Food, Restaurant
+from UserData.models import Customer
+from .models import Food, Restaurant, LLMChat
 from pgvector.django import CosineDistance
 import json
 

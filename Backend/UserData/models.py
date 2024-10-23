@@ -12,24 +12,24 @@ from ChatBot.models import Food
 
 class BAUserManager(BaseUserManager):
 
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, request, email, password, is_customer=False, is_partner=False, **extra_fields):
         if not email:
             raise ValueError('Email is required!')
         email = self.normalize_email(email)
-        user = Users(email=email, **extra_fields)
+        user = Users(email=email,is_customer=is_customer,is_partner=is_partner, **extra_fields)
         if not password:
             raise ValueError('Password is required.')
         user.set_password(password)
         user.save()
         return user
     
-    def create_customer(self, email, password, user_name, phone_number, address, **extra_fields):
+    def create_customer(self, request ,email, password, user_name, phone_number, address, **extra_fields):
         '''if 'email' in extra_fields:
             extra_fields.pop('email')
         if 'password' in extra_fields:
             extra_fields.pop('password')'''
         extra_fields.setdefault('is_customer', True)
-        user = self.create_user(email=email, password=password, **extra_fields)
+        user = self.create_user(request=request, email=email, password=password, **extra_fields)
         customer = Customer.objects.create(
             user = user,
             user_name = user_name,
@@ -38,9 +38,9 @@ class BAUserManager(BaseUserManager):
         )
         return customer
     
-    def create_partner(self, email, password, name, phone_number, vehicle_model, license_number, vehicle_id, **extra_fields):
+    def create_partner(self, request, email, password, name, phone_number, vehicle_model, license_number, vehicle_id, **extra_fields):
         extra_fields.setdefault('is_partner', True)
-        user = self.create_user(email, password, **extra_fields)
+        user = self.create_user(request=request, email=email, password=password, **extra_fields)
         partner = DeliveryPartners.objects.create(
             user = user,
             name = name,
@@ -88,8 +88,7 @@ class DeliveryPartners(models.Model):
         return f"Welcome to the BonAppet Family, {self.employee_pid}{self.employee_id_suf}! Let's get started!"
     
 class Feedback(models.Model):
-    feedback_pid = models.CharField(default="BAF")
-    feedback_sid = models.AutoField(primary_key=True)
+    user = models.ForeignKey("Customer", on_delete=models.CASCADE)
     content = models.TextField(max_length=450)
     
 @receiver(post_save, sender= [Users, DeliveryPartners])
@@ -98,9 +97,9 @@ def send_message(sender, instance, created, **kwargs):
             print(instance.welcome_message())
 
 class Cart(models.Model):
-    food_item = models.ForeignKey('ChatBot.Food', on_delete=models.CASCADE)
+    user = models.ForeignKey('UserData.Customer', on_delete=models.CASCADE)
+    food = models.ForeignKey('ChatBot.Food', on_delete=models.CASCADE)  
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return f"{self.quantity} x {self.food_item.name}"
-    
