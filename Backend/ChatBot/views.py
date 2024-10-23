@@ -2,7 +2,8 @@ from django.http.response import HttpResponseNotFound, JsonResponse, StreamingHt
 from django.views.decorators.csrf import csrf_exempt
 from .chatbot import BonBot
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from .models import Food, Restaurant
+from UserData.models import Customer
+from .models import Food, Restaurant, LLMChat
 from pgvector.django import CosineDistance
 import json
 
@@ -140,4 +141,29 @@ def test_vector(request):
         except ValueError:
             return JsonResponse({"response": "Failed to retrieve the data"})
         
+    return HttpResponseNotFound("Invalid request method. Please use POST.")
+
+@csrf_exempt
+def create_LLMChat(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            user_mail = data.get("user_mail", "")
+            chat = bon_bot.chat_history
+        except json.JSONDecodeError:
+            return JsonResponse({"response": "Invalid JSON format"}, status=400)
+        
+        if (chat):
+            try:
+                user = Customer.objects.get(mail=user_mail)
+                LLMChat.objects.create(
+                    user=user,
+                    chat=chat
+                )
+                return JsonResponse({"response": "Successfully Created"}, status=200)
+            except ValueError:
+                return JsonResponse({"response": "Failed to create"}, status=400)
+        else:
+            return JsonResponse({"response": "No chat history to save"}, status=400)
+    
     return HttpResponseNotFound("Invalid request method. Please use POST.")
