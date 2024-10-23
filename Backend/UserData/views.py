@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout
-from UserData.models import Customer, DeliveryPartners, Users
+from UserData.models import Customer, DeliveryPartners, Users, Feedback, Cart
+from ChatBot.models import Food
+from UserData.models import Customer, DeliveryPartners, Users, Feedback, Cart
+from ChatBot.models import Food
 from django.contrib.auth.hashers import check_password
 from django.http import JsonResponse
 import json
@@ -82,11 +85,76 @@ def user_register(request):
     if Users.objects.filter(email=user_mail).exists():
         return JsonResponse({"response": "Registration Failed, User Exists"}, status=200)
 
-    # Create the new user
-    user = Users.objects.create_user(email=user_mail, password=password)
-    user.is_cutomer = True
-    user.save()
-    customer = Customer.objects.create_customer(request=request, user=user, user_name=user_name, phone_number = phone_no,address=add)
+    customer = Users.objects.create_customer(request=request, email=user_mail, password=password, user_name=user_name, phone_number = phone_no,address=add)
     customer.save()
 
     return JsonResponse({"response": "Registration Success"}, status=200)
+
+def create_feedback(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"response": "Invalid JSON format"}, status=400)
+    user_mail = data.get("user_mail", "")
+    feedback = data.get("feedback", "")
+    try:
+        user = Users.objects.get(email=user_mail)
+    except ObjectDoesNotExist:
+        return JsonResponse({"response": "User not found"}, status=404)
+    feedback = Feedback.objects.create(user=user, content=feedback)
+    feedback.save()
+    return JsonResponse({"response": "Feedback submitted successfully"}, status=200)
+
+def create_cart(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"response": "Invalid JSON format"}, status=400)
+    user_mail = data.get("user_mail", "")
+    food_id = data.get("food_id", "")
+    quantity = data.get("quantity", "")
+    try:
+        user = Users.objects.get(email=user_mail)
+    except ObjectDoesNotExist:
+        return JsonResponse({"response": "User not found"}, status=404)
+    try:
+        food = Food.objects.get(food_id=food_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({"response": "Food not found"}, status=404)
+    cart = Cart.objects.create(user=user, food=food, quantity=quantity)
+    cart.save()
+    return JsonResponse({"response": "Item added to cart"}, status=200)
+def create_feedback(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"response": "Invalid JSON format"}, status=400)
+    user_mail = data.get("user_mail", "")
+    feedback = data.get("feedback", "")
+    try:
+        user = Users.objects.get(email=user_mail)
+    except ObjectDoesNotExist:
+        return JsonResponse({"response": "User not found"}, status=404)
+    feedback = Feedback.objects.create(user=user, content=feedback)
+    feedback.save()
+    return JsonResponse({"response": "Feedback submitted successfully"}, status=200)
+
+def create_cart(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"response": "Invalid JSON format"}, status=400)
+    user_mail = data.get("user_mail", "")
+    food_id = data.get("food_id", "")
+    quantity = data.get("quantity", "")
+    try:
+        user = Users.objects.get(email=user_mail)
+    except ObjectDoesNotExist:
+        return JsonResponse({"response": "User not found"}, status=404)
+    try:
+        food = Food.objects.get(food_id=food_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({"response": "Food not found"}, status=404)
+    cart = Cart.objects.create(user=user, food=food, quantity=quantity)
+    cart.save()
+    return JsonResponse({"response": "Item added to cart"}, status=200)
