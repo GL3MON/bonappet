@@ -56,7 +56,7 @@ def partner_register(request):
     user = Users.objects.create_user(email=employee_mail, password=password)
     user.is_partner = True
     user.save()
-    partner = DeliveryPartners.objects.create_user(request=request, user=user, name=name, phone_number=phone_no, vehicle_model=veh_model, license_number=license_no, vehicle_id=veh_id)
+    partner = DeliveryPartners.objects.create_partner(request=request, user=user, name=name, phone_number=phone_no, vehicle_model=veh_model, license_number=license_no, vehicle_id=veh_id)
     partner.save()
     
     return JsonResponse({"response": "Registration successful"}, status=200)
@@ -86,7 +86,7 @@ def user_register(request):
     user = Users.objects.create_user(email=user_mail, password=password)
     user.is_cutomer = True
     user.save()
-    customer = Customer.objects.create_user(request=request, user=user, user_name=user_name, phone_number = phone_no,address=add)
+    customer = Customer.objects.create_customer(request=request, user=user, user_name=user_name, phone_number = phone_no,address=add)
     customer.save()
 
     return JsonResponse({"response": "Registration Success"}, status=200)

@@ -141,3 +141,46 @@ def test_vector(request):
             return JsonResponse({"response": "Failed to retrieve the data"})
         
     return HttpResponseNotFound("Invalid request method. Please use POST.")
+
+@csrf_exempt
+def get_fooditems(request):
+    if request.method == "POST":
+        try:
+            info = json.loads(request.body.decode("utf-8"))
+        except json.JSONDecodeError:
+            return JsonResponse({"response": "Invalid JSON format"}, status=400)
+        
+        restaurant_id = info.get("restaurant_id", "")
+        restaurant = Restaurant.objects.get(restaurant_id=restaurant_id)
+        food_items = Food.objects.filter(restaurant = restaurant)
+        food_list = []
+        for food in food_items:
+            food_list.append({
+                'food_id': food.food_id,
+                'name': food.name,
+                'cuisine_type': food.cuisine_type,
+                'food_category': food.food_category,
+                'rating': food.rating,
+                'available': food.availability
+            })
+        return JsonResponse(food_list, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=405)
+
+@csrf_exempt    
+def topfive_restaurants(request):
+    if request.method == "POST":
+        restaurants = Restaurant.objects.order_by('-rating')[:5]
+        restaurant_list = []
+        for restaurant in restaurants:
+            restaurant_list.append({
+                'restaurant_id' : restaurant.restaurant_id,
+                'name' : restaurant.name,
+                'cuisine' : restaurant.cuisine,
+                'rating' : restaurant.rating,
+                'location' : restaurant.location,
+                'contact_no' : restaurant.contact_no
+            })
+        return JsonResponse(restaurant_list, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=405)

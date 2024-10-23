@@ -49,5 +49,3 @@ class Food(models.Model):
 class LLMChat(models.Model):
     user = models.OneToOneField('UserData.Customer', on_delete=models.CASCADE, null=True)
     chat = models.TextField()
-
-
