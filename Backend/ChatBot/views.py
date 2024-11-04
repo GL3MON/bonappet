@@ -168,6 +168,33 @@ def get_fooditems(request):
     else:
         return JsonResponse({"error": "Method not allowed."}, status=405)
 
+@csrf_exempt
+def restauarant_details(request):
+    if request.method == 'POST':
+        try:
+            info = json.loads(request.body.decode("utf-8"))
+        except json.JSONDecodeError:
+            return JsonResponse({"response": "Invalid JSON format"}, status=400)    
+        restaurant_id = info.get("restaurant_id", "")
+        restaurant = Restaurant.objects.get(restaurant_id=restaurant_id)
+        if not restaurant_id:
+            return JsonResponse({"response": "restaurant_id is required"}, status=400)
+        try:
+            restaurant = Restaurant.objects.get(restaurant_id=restaurant_id)
+        except Restaurant.DoesNotExist:
+            return JsonResponse({"response": "Restaurant not found"}, status=404)
+        restaurant_detail = {
+            'restaurant_id' : restaurant.restaurant_id,
+            'name' : restaurant.name,
+            'cuisine' : restaurant.cuisine,
+            'rating' : restaurant.rating,
+            'location' : restaurant.location,
+            'contact_no' : restaurant.contact_no
+            }
+        return JsonResponse(restaurant_detail, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=405)
+
 @csrf_exempt    
 def topfive_restaurants(request):
     if request.method == "POST":
