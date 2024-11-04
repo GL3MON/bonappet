@@ -21,7 +21,7 @@ class Food(models.Model):
     food_category = models.BooleanField(default=True)
     rating = models.SmallIntegerField(validators=[MaxValueValidator(5)], default=1)
     availability = models.BooleanField(default=True)
-    price = models.IntegerField
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     restaurant = models.ForeignKey(
         Restaurant,
         on_delete=models.CASCADE,

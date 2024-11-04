@@ -1,8 +1,6 @@
 from typing import Any
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -12,7 +10,7 @@ from ChatBot.models import Food
 
 class BAUserManager(BaseUserManager):
 
-    def create_user(self, request, email, password, is_customer=False, is_partner=False, **extra_fields):
+    def create_user(self, email, password, is_customer=False, is_partner=False, request=None, **extra_fields):
         if not email:
             raise ValueError('Email is required!')
         email = self.normalize_email(email)
@@ -62,7 +60,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
 class Customer(models.Model):
     user = models.OneToOneField("Users", on_delete=models.CASCADE, null=True)
     user_pid = models.CharField(default="BA4")
-    user_id_suf = models.AutoField(primary_key=True)
+    user_id_suf = models.AutoField(primary_key=True, default=1)
     user_name = models.CharField(max_length=75, blank=False, default="Your name")
     phone_number = models.BigIntegerField(validators=[MaxValueValidator(9999999999)], blank=False)
     address = models.TextField(max_length=450, blank=False, default="ABC street, Nowhere city")
@@ -82,13 +80,15 @@ class DeliveryPartners(models.Model):
     license_number = models.CharField(max_length=15)
     vehicle_id = models.CharField(max_length=10, blank=False)
 
+    objects = BAUserManager()
+
     def __str__(self):
         return f"{self.employee_pid}{self.employee_id_suf}"
     def welcome_message(self):
         return f"Welcome to the BonAppet Family, {self.employee_pid}{self.employee_id_suf}! Let's get started!"
     
 class Feedback(models.Model):
-    user = models.ForeignKey("Customer", on_delete=models.CASCADE)
+    user = models.ForeignKey("Customer", on_delete=models.CASCADE, default=16)
     content = models.TextField(max_length=450)
     
 @receiver(post_save, sender= [Users, DeliveryPartners])
@@ -97,8 +97,8 @@ def send_message(sender, instance, created, **kwargs):
             print(instance.welcome_message())
 
 class Cart(models.Model):
-    user = models.ForeignKey('UserData.Customer', on_delete=models.CASCADE)
-    food = models.ForeignKey('ChatBot.Food', on_delete=models.CASCADE)  
+    user = models.ForeignKey('UserData.Customer', on_delete=models.CASCADE, default=9)
+    food = models.ForeignKey('ChatBot.Food', on_delete=models.CASCADE, default=1)  
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
