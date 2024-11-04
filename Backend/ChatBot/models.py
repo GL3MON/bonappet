@@ -22,6 +22,7 @@ class Food(models.Model):
     rating = models.SmallIntegerField(validators=[MaxValueValidator(5)], default=1)
     availability = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    purchase_count = models.PositiveBigIntegerField(default=0, help_text="No. of times this food item has been bought.")
     restaurant = models.ForeignKey(
         Restaurant,
         on_delete=models.CASCADE,
