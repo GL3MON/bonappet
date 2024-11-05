@@ -1,7 +1,7 @@
 // import
 import '../styles/Login.css';
 import axios from 'axios';
-import login_image from '../assets/login.jpg';
+import login_image from '/assets/login.jpg';
 import React, { useState, useEffect } from 'react';
 import { color, motion, useScroll, useTransform } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';

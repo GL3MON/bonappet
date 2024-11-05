@@ -1,6 +1,6 @@
 import { color, motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import bgimg from '../assets/foodDashboard.jpg'
+import bgimg from '/assets/foodDashboard.jpg'
 import '../styles/HomePage.css';
 import NavBar from './RestNav';
 import Orders from './Orders';

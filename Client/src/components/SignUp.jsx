@@ -1,6 +1,6 @@
 
 import '../styles/Signup.css'
-import login_image from '../assets/login.jpg';
+import login_image from '/assets/login.jpg';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

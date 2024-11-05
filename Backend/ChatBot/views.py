@@ -96,6 +96,10 @@ def insert_food(request):
             name = data.get("name", "")
             restaurant_id = data.get("restaurant_id", "")
             description = data.get("description", "")
+            cuisine_type = data.get("cuisine_type", "")
+            food_category = data.get("food_category", "")
+            rating = data.get("rating", "")
+            price = data.get("price", "")
            
         except json.JSONDecodeError:
             return JsonResponse({"response": "Invalid JSON format"}, status=400)
@@ -105,6 +109,8 @@ def insert_food(request):
             context = f'''
             Food Name: {name}
             Restaurant Name: {restaurant.name}
+            Cuisine Type: {cuisine_type}
+            Food Category(Veg/Non Veg): {food_category}
             Food Description:
             {description} 
             '''
@@ -115,7 +121,11 @@ def insert_food(request):
                 name=name,
                 restaurant=restaurant,
                 description=description,
-                embedding=embedding
+                embedding=embedding,
+                cuisine_type=cuisine_type,
+                food_category=food_category,
+                rating=rating,
+                price=price,
             )
             return JsonResponse({"response": "Successfully Inserted"}, status=200)
         except ValueError:
@@ -197,7 +207,7 @@ def restauarant_details(request):
 
 @csrf_exempt    
 def topfive_restaurants(request):
-    if request.method == "POST":
+    if request.method == "GET":
         restaurants = Restaurant.objects.order_by('-rating')[:5]
         restaurant_list = []
         for restaurant in restaurants:
@@ -210,5 +220,60 @@ def topfive_restaurants(request):
                 'contact_no' : restaurant.contact_no
             })
         return JsonResponse(restaurant_list, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=405)
+    
+@csrf_exempt    
+def top_foods(request):
+    if request.method == "POST":
+        foods = Food.objects.order_by('-rating')
+        food_list = []
+        for food in foods:
+            food_list.append({
+                'restaurant_id' : food.restaurant.restaurant_id,
+                'food_id' : food.food_id,
+                'name' : food.name,
+                'cuisine' : food.cuisine_type,
+                'type': food.food_category,
+                'rating' : food.rating,
+                'price' : food.price,
+                'available' : food.availability
+            })
+        return JsonResponse(food_list, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=405)
+
+@csrf_exempt
+def search(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            query = data.get("query", "")
+            food_list = []
+            try:
+                embedding = embeddings.embed_query(query)
+                print(type(embedding))
+                foods = Food.objects.annotate(distance=CosineDistance("embedding", embedding)).order_by("distance")
+                null_filtered_documents = filter(lambda doc: True if doc.distance else False, foods)
+                foods = filter(lambda doc: True if doc.distance < 0.44 else False, null_filtered_documents)
+                print(foods)
+                for food in foods:
+                    food_list.append({
+                        'restaurant_id' : food.restaurant.restaurant_id,
+                        'food_id' : food.food_id,
+                        'name' : food.name,
+                        'cuisine' : food.cuisine_type,
+                        'type': food.food_category,
+                        'rating' : food.rating,
+                        'price' : food.price,
+                        'available' : food.availability
+                    })
+                return JsonResponse(food_list, safe=False)
+            
+            except ValueError:
+                return JsonResponse({"response": "Failed to retrieve the data"})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({"response": "Invalid JSON format"}, status=400)
     else:
         return JsonResponse({"error": "Method not allowed."}, status=405)

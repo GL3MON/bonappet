@@ -12,14 +12,14 @@ class Restaurant(models.Model):
     availability = models.BooleanField(default=True)
     contact_no = models.BigIntegerField(validators=[MaxValueValidator(9999999999)])
     location = models.TextField(null=True)
-    rating = models.SmallIntegerField(validators=[MaxValueValidator(5)],default=1)
+    rating = models.FloatField(validators=[MaxValueValidator(5)],default=1)
 
 class Food(models.Model):
     food_id = models.BigAutoField(primary_key=True)
     name = models.TextField()
     cuisine_type = models.CharField(max_length=100)
     food_category = models.BooleanField(default=True)
-    rating = models.SmallIntegerField(validators=[MaxValueValidator(5)], default=1)
+    rating = models.FloatField(validators=[MaxValueValidator(5)], default=1)
     availability = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     purchase_count = models.PositiveBigIntegerField(default=0, help_text="No. of times this food item has been bought.")
