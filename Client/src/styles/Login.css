@@ -29,6 +29,17 @@ input:-webkit-autofill {
     z-index: 0;
 }
 
+.login-failed {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-top: 10px;
+    padding: 5px 5px 5px 30px;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    background: linear-gradient(160deg, rgb(176, 0, 0), white);
+    width: 100%;
+}
+
 .login-image img {
     width: 450px;
     height: auto;
@@ -72,7 +83,7 @@ input:-webkit-autofill {
 .login-row {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     margin-bottom: 30px;
     justify-content: center;
 }
@@ -118,7 +129,6 @@ input:-webkit-autofill {
     margin-left: 30px;
     margin-top: 10px;
     font-weight: bold;
-    margin-bottom: 10vh;
     font-size: 24px; 
     padding: 10px; 
 }
@@ -132,4 +142,8 @@ input:-webkit-autofill {
     color: white;
     letter-spacing: 10px;
     font-weight: bold;
+}
+
+.login-items{
+    margin-top: 7vh;
 }

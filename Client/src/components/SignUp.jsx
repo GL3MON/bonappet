@@ -19,6 +19,7 @@ const Signup = () => {
             const response = await axios.post('http://127.0.0.1:8000/register/', {
                 "user_mail":mail,
                 "password": password,
+                "repassword": password,
                 "user_name": username, 
                 "phone": phoneno,
                 "address": address,

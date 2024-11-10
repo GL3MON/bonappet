@@ -47,3 +47,14 @@ p {
     text-align: center;
 }
 
+.green-tick {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    background-color: white;
+    color: white;
+    background-color:#4CAF50;
+    border-radius: 0px 20px 0px 5px;
+    right:0px;
+}
+

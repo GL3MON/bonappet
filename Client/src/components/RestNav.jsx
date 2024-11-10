@@ -1,5 +1,6 @@
 import '../styles/NavBar.css'
 import { motion, useTransform, useAnimate, transform } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const NavBar = ({content}) => {
 
@@ -13,6 +14,8 @@ const NavBar = ({content}) => {
         },
     }
 
+    const nagivate = useNavigate();
+
     return <div className='nav-bar'>
         <motion.div
             id="nav-item-initial"
@@ -20,6 +23,7 @@ const NavBar = ({content}) => {
             variants={topVariants}
             whileHover={"hover"}
             whileTap={"tap"}
+            onClick={()=>{nagivate('/')}}
         >
             <svg viewBox="0 0 32 32" height="19" width="19" fill="#686b78" >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 73.4-73.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-128 128z"/></svg>
@@ -44,6 +48,7 @@ const NavBar = ({content}) => {
         variants={topVariants}
         whileHover={"hover"}
         whileTap={"tap"}
+        onClick={()=>{nagivate('/cart')}}
         >
             <span>Check Out </span>
             <svg viewBox="0 0 32 32" height="19" width="19" fill="#686b78">

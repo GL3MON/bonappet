@@ -43,7 +43,7 @@ const router = createBrowserRouter([
     errorElement: <div>404 Not Found</div>
   },
   {
-    path: 'signup/',
+    path: 'register/',
     element: <Signup />,
     errorElement: <div>404 Not Found</div>
   },

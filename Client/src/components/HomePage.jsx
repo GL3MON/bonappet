@@ -10,6 +10,7 @@ const HomePage = () => {
     const ref = useRef(null);
     const [topFoods, setTopFoods] = useState([]);
     const [topRestaurants, setTopRestaurants] = useState([]);
+    const [trendingFoods, setTrendingFoods] = useState([]);
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start start", "end start"],
@@ -25,6 +26,18 @@ const HomePage = () => {
         }
     }
 
+    const trending_food = async () => {
+        try {
+            const trending_foods = await axios.post('http://127.0.0.1:8000/trending_foods/', {});
+            setTrendingFoods(trending_foods.data)
+            console.log(trending_foods.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+
     const top_restaurants = async () => {
         try {
             const top_restaurants = await axios.get('http://127.0.0.1:8000/top_restaurants/', {});
@@ -37,6 +50,7 @@ const HomePage = () => {
 
     useEffect(() => {highest_rated_food()}, []);
     useEffect(() => {top_restaurants()}, []);
+    useEffect(() => {trending_food()}, []);
 
     const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "150%"]);
     const textY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
@@ -71,7 +85,7 @@ const HomePage = () => {
             </div>
             <NavBar />
             <BasicDishSwiper title={"Highest Rated Food"} content={topFoods} type={"food"}/>
-            <BasicDishSwiper title={"Trending Food"} content={topFoods} type={"food"}/>
+            <BasicDishSwiper title={"Trending Food"} content={trendingFoods} type={"food"}/>
             <BasicDishSwiper title={"Top Restaurants"} content={topRestaurants} type={"restaurant"}/>
         </div>
     );
