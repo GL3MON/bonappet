@@ -7,7 +7,7 @@ from .models import Food, Restaurant, LLMChat
 from pgvector.django import CosineDistance
 import json
 
-API_KEY = "AIzaSyCPz0WdsXp9dhYg_rWNZnGDINv11rqxi-I"
+API_KEY = ""
 
 bon_bot = BonBot(api_key=API_KEY)
 bon_bot_chain =  bon_bot.get_llm_chain()
