@@ -27,7 +27,14 @@ def user_login(request):
         if check_password(password, user.password):
             if user.is_customer:
                 customer = Customer.objects.get(user=user)
-                return JsonResponse({"response": "Login successful", "user_type": "Customer"}, status=200)
+                return JsonResponse({
+                    "response": "Login successful",
+                    "user_type": "Customer",
+                    "user_name": customer.user_name,
+                    "user_mail": customer.user.email,
+                    "phone_number": customer.phone_number,
+                    "address": customer.address,
+                }, status=200)
             elif user.is_partner:
                 partner = DeliveryPartners.objects.get(user=user)
                 return JsonResponse({"response": "Login successful", "user_type": "Delivery Partner"}, status=200)
@@ -86,7 +93,9 @@ def user_register(request):
         return JsonResponse({"response": "Registration Failed, User Exists"}, status=200)
 
     customer = Users.objects.create_customer(request=request, email=user_mail, password=password, user_name=user_name, phone_number = phone_no,address=add)
-    customer.save()
+
+    if customer:
+        customer.save()
 
     return JsonResponse({"response": "Registration Success"}, status=200)
 
@@ -105,25 +114,6 @@ def create_feedback(request):
     feedback.save()
     return JsonResponse({"response": "Feedback submitted successfully"}, status=200)
 
-def create_cart(request):
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-    except json.JSONDecodeError:
-        return JsonResponse({"response": "Invalid JSON format"}, status=400)
-    user_mail = data.get("user_mail", "")
-    food_id = data.get("food_id", "")
-    quantity = data.get("quantity", "")
-    try:
-        user = Users.objects.get(email=user_mail)
-    except ObjectDoesNotExist:
-        return JsonResponse({"response": "User not found"}, status=404)
-    try:
-        food = Food.objects.get(food_id=food_id)
-    except ObjectDoesNotExist:
-        return JsonResponse({"response": "Food not found"}, status=404)
-    cart = Cart.objects.create(user=user, food=food, quantity=quantity)
-    cart.save()
-    return JsonResponse({"response": "Item added to cart"}, status=200)
 def create_feedback(request):
     try:
         data = json.loads(request.body.decode("utf-8"))
@@ -139,25 +129,39 @@ def create_feedback(request):
     feedback.save()
     return JsonResponse({"response": "Feedback submitted successfully"}, status=200)
 
-def create_cart(request):
+@csrf_exempt
+def add_to_cart(request):
+    if request.method != 'POST':
+        return JsonResponse({"response": "Invalid request method"}, status=405)
     try:
         data = json.loads(request.body.decode("utf-8"))
     except json.JSONDecodeError:
         return JsonResponse({"response": "Invalid JSON format"}, status=400)
+    
     user_mail = data.get("user_mail", "")
     food_id = data.get("food_id", "")
-    quantity = data.get("quantity", "")
+    quantity = data.get("quantity", 1)
+    
     try:
-        user = Users.objects.get(email=user_mail)
-    except ObjectDoesNotExist:
+        user = Customer.objects.get(user__email=user_mail)
+    except Customer.DoesNotExist:
         return JsonResponse({"response": "User not found"}, status=404)
+    
     try:
         food = Food.objects.get(food_id=food_id)
     except ObjectDoesNotExist:
         return JsonResponse({"response": "Food not found"}, status=404)
-    cart = Cart.objects.create(user=user, food=food, quantity=quantity)
-    cart.save()
-    return JsonResponse({"response": "Item added to cart"}, status=200)
+    
+    cart, created = Cart.objects.get_or_create(user=user, food=food)
+    if int(quantity) > 0:
+        cart.quantity = int(quantity)
+        cart.save()
+        return JsonResponse({"response": "Item added to cart"}, status=200)
+    else:
+        cart.delete()
+        return JsonResponse({"response": "Item removed from cart"}, status=200)
+
+
 
 @csrf_exempt
 def get_cartitems(request):
@@ -167,24 +171,28 @@ def get_cartitems(request):
         info = json.loads(request.body.decode("utf-8"))
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON format"}, status=400)
-    user_id = info.get("customer_id", "")
-    if not user_id:
-        return JsonResponse({"error": "customer_id is required"}, status=400)
+    user_mail = info.get("user_mail", "")
+    if not user_mail:
+        return JsonResponse({"error": "customer_mail is required"}, status=400)
     try:
-        customer = Customer.objects.get(user_id_suf=user_id)
+        customer = Customer.objects.get(user__email=user_mail)
     except Customer.DoesNotExist:
         return JsonResponse({"error": "Customer not found"}, status=400)
+    
     cart_items = Cart.objects.filter(user=customer)
     cart_data = []
     for item in cart_items:
         if item.food and isinstance(item.food.price, (int, float, Decimal)):
             cart_data.append({
                 'name': item.food.name,
+                'food_id': item.food.food_id,
+                'rest_id': item.food.restaurant.restaurant_id,
                 'quantity': item.quantity,
                 'price': float(item.food.price)
             })
         else:
             return JsonResponse({"error": "Invalid food price data in cart"}, status=405)
     response = JsonResponse({"cart_items": cart_data})
+    print(cart_data)
     response.status_code = 200
     return response

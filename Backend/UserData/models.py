@@ -60,7 +60,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
 class Customer(models.Model):
     user = models.OneToOneField("Users", on_delete=models.CASCADE, null=True)
     user_pid = models.CharField(default="BA4")
-    user_id_suf = models.AutoField(primary_key=True, default=1)
+    user_id_suf = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=75, blank=False, default="Your name")
     phone_number = models.BigIntegerField(validators=[MaxValueValidator(9999999999)], blank=False)
     address = models.TextField(max_length=450, blank=False, default="ABC street, Nowhere city")
@@ -100,6 +100,3 @@ class Cart(models.Model):
     user = models.ForeignKey('UserData.Customer', on_delete=models.CASCADE, default=9)
     food = models.ForeignKey('ChatBot.Food', on_delete=models.CASCADE, default=1)  
     quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.quantity} x {self.food_item.name}"

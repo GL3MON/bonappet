@@ -16,7 +16,7 @@ embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_a
 
 def rag_context_filter(documents: list):
     null_filtered_documents = filter(lambda doc: True if doc.distance else False, documents)
-    filtered_documents = filter(lambda doc: True if doc.distance < 0.25 else False, null_filtered_documents)
+    filtered_documents = filter(lambda doc: True if doc.distance < 0.38 else False, null_filtered_documents)
     context_list = []
     for doc in filtered_documents:
         context = f'''
@@ -42,7 +42,7 @@ def chat(request):
                 {
                     "role": "user",
                     "content": f"{query}"
-                }
+                }   
             )
             print(query)
         except json.JSONDecodeError:
@@ -57,6 +57,7 @@ def chat(request):
             ).order_by("distance")
             print([f.distance for f in food])
             context = rag_context_filter(food)
+            print(context)
             response = bon_bot_chain.invoke({'query':query ,'context':context, 'history':bon_bot.chat_history})
             bon_bot.chat_history.append(
                 {
@@ -166,17 +167,21 @@ def get_fooditems(request):
         food_items = Food.objects.filter(restaurant = restaurant)
         food_list = []
         for food in food_items:
-            food_list.append({
+            food_list.append({  
                 'food_id': food.food_id,
                 'name': food.name,
                 'cuisine_type': food.cuisine_type,
                 'food_category': food.food_category,
                 'rating': food.rating,
-                'available': food.availability
+                'available': food.availability,
+                'purchase_count': food.purchase_count,
+                'restaurant_id': food.restaurant.restaurant_id,
             })
         return JsonResponse(food_list, safe=False)
     else:
         return JsonResponse({"error": "Method not allowed."}, status=405)
+    
+
 
 @csrf_exempt
 def restauarant_details(request):
@@ -242,6 +247,27 @@ def top_foods(request):
         return JsonResponse(food_list, safe=False)
     else:
         return JsonResponse({"error": "Method not allowed."}, status=405)
+
+@csrf_exempt    
+def trending_foods(request):
+    if request.method == "POST":
+        foods = Food.objects.order_by('-purchase_count')
+        food_list = []
+        for food in foods:
+            food_list.append({
+                'restaurant_id' : food.restaurant.restaurant_id,
+                'food_id' : food.food_id,
+                'name' : food.name,
+                'cuisine' : food.cuisine_type,
+                'type': food.food_category,
+                'rating' : food.rating,
+                'price' : food.price,
+                'available' : food.availability
+            })
+        return JsonResponse(food_list, safe=False)
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=405)
+
 
 @csrf_exempt
 def search(request):
