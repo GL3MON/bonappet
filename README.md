@@ -1,7 +1,5 @@
 # BonAppet
-
-*September 2024*  
-**An innovative Food-Tech platform powered by Large Language Models (LLMs)**, designed to revolutionize user experiences with intelligent recommendations and seamless interactions.  
+*An innovative Food-Tech platform powered by Large Language Models (LLMs)**, designed to revolutionize user experiences with intelligent recommendations and seamless interactions.*
 
 ---
 
