@@ -43,6 +43,5 @@ BonAppet is a cutting-edge platform combining **Python**, **Langchain**, **Djang
 
 ### **Future Enhancements**  
 
-- **Integration with AR/VR** for an immersive dining experience.  
 - Expanding **multilingual support** for regional dialects.  
 - Introduction of **smart ordering assistants** powered by AI.  
